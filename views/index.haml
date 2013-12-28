@@ -12,7 +12,7 @@
   %body
     %div{:class => 'container'}
       %ul{:id => 'channels-tab', :class => 'nav nav-tabs'}
-      %form{:class => 'form-inline',  :id => 'auth', :onsubmit => "connect('#{@ws_url}'); return false"}
+      %form{:class => 'form-inline',  :id => 'auth', :onsubmit => "connect('#{locals[:url]}'); return false"}
         %input{:type => 'password', :name => 'pass', :class => 'form-control'}
         %button{:class => 'btn btn-primary'} connect
       %form{:class => 'form-inline',  :id => 'send', :onsubmit => 'send(); return false', :style => 'display: none;'}
