@@ -1,0 +1,22 @@
+%html
+  %head
+    %title IRC
+    %link{:rel => 'stylesheet', :href => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'}
+    %link{:rel => 'stylesheet', :href => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css'}
+    %link{:rel => 'stylesheet', :href => '/css/style.css'}
+    %script{:src => 'http://code.jquery.com/jquery-1.10.2.min.js'}
+    %script{:src => 'http://static.s5r.jp/js/jquery-dateFormat.min.js'}
+    %script{:src => 'http://static.s5r.jp/js/jquery.json-2.4.min.js'}
+    %script{:src => 'http://static.s5r.jp/js/md5.js'}
+    %script{:src => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js'}
+  %body
+    %div{:class => 'container'}
+      %ul{:id => 'channels-tab', :class => 'nav nav-tabs'}
+      %form{:class => 'form-inline',  :id => 'auth', :onsubmit => "connect('#{@ws_url}'); return false"}
+        %input{:type => 'password', :name => 'pass', :class => 'form-control'}
+        %button{:class => 'btn btn-primary'} connect
+      %form{:class => 'form-inline',  :id => 'send', :onsubmit => 'send(); return false', :style => 'display: none;'}
+        %input{:type => 'text', :name => 'body', :class => 'form-control'}
+        %button{:class => 'btn btn-primary'} send
+      %div{:id => 'channels', :class => 'tab-content'}
+    %script{:src => '/js/chat.js'}

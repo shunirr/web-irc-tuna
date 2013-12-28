@@ -1,0 +1,10 @@
+source 'http://rubygems.org'
+
+gem 'celluloid-io'
+gem 'ircp'
+gem 'json'
+gem 'pit'
+gem 'em-websocket'
+gem 'sinatra'
+gem 'haml'
+gem 'rack'

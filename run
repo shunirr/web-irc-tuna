@@ -1,0 +1,18 @@
+#!/bin/sh
+APP_PID="app.pidfile"
+WS_PID="ws.pidfile"
+
+if [ -f $APP_PID ]; then
+  kill `cat $APP_PID`
+  rm $APP_PID
+fi
+bundle exec rackup --port 23456 \
+  >log.app.txt 2>&1 &
+echo $! >$APP_PID
+
+if [ -f $WS_PID ]; then
+  kill `cat $WS_PID`
+  rm $WS_PID
+fi
+bundle exec ruby ./irc-http-api.rb >log.ws.txt 2>&1 &
+echo $! >$WS_PID

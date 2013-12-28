@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "EmojiSymbols";
+  src: url('http://static.s5r.jp/fonts/EmojiSymbols-Regular.woff') format('woff');
+  text-decoration: none;
+  font-style: normal;
+}
+body {
+  font-family: 'Average Sans', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', sans-serif, EmojiSymbols;
+}
+
+.time, .nick {
+  padding-right: 10px;
+}
+.time {
+  color: gray;
+  font-size: small;
+}
+.nick {
+  color: gray;
+  font-weight: bold;
+  font-size: small;
+}
+.notice {
+  color: gray;
+}
