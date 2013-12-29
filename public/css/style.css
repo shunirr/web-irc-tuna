@@ -25,6 +25,7 @@ body {
 }
 .irc_bold { font-weight: bold; }
 .irc_underline { text-decoration: underline; }
+.irc_color_0{ color:white }
 .irc_color_1{ color:black }
 .irc_color_2{ color:navy }
 .irc_color_3{ color:green }
@@ -40,7 +41,7 @@ body {
 .irc_color_13{ color:pink }
 .irc_color_14{ color:darkgray }
 .irc_color_15{ color:lightgrey }
-.irc_color_16{ color:white }
+.irc_bg_color_0{ background-color:white }
 .irc_bg_color_1{ background-color:black }
 .irc_bg_color_2{ background-color:navy }
 .irc_bg_color_3{ background-color:green }
@@ -56,4 +57,3 @@ body {
 .irc_bg_color_13{ background-color:pink }
 .irc_bg_color_14{ background-color:darkgray }
 .irc_bg_color_15{ background-color:lightgrey }
-.irc_bg_color_16{ background-color:white }
