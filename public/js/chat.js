@@ -25,7 +25,7 @@ function connect(url) {
         $('<p>')
           .append($('<span>').attr({ class: 'time' }).text(formatDate(parseInt(data.time))))
           .append($('<span>').attr({ class: 'nick' }).text(data.from.id))
-          .append($('<span>').attr({ class: 'body ' + data.mode }).text(data.body))
+          .append($('<span>').attr({ class: 'body ' + data.mode }).html(data.body))
       );
     }
   };

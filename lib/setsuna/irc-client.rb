@@ -6,6 +6,8 @@ require 'ircp'
 require 'json'
 require 'pit'
 require 'em-websocket'
+require 'irc-string'
+require 'cgi'
 
 module Setsuna
   class IrcClient
@@ -87,7 +89,6 @@ module Setsuna
     end
   
     def on_privmsg(msg)
-      p msg
       if msg.prefix
         on_channel_talk :privmsg, msg
       else
@@ -105,22 +106,23 @@ module Setsuna
   
     def on_private_talk(mode, msg)
       from = msg.params[0]
-      body = msg.params[1]
+      body = CGI.escapeHTML(msg.params[1])
       data = {
           :from => {
             :type => 'user',
             :id => s(from),
           },
           :mode => mode,
-          :body => s(body),
+          :body => s(IrcString.parse(body).to_html),
           :time => Time.now.to_i,
       }
+      puts data
       @websocket.send data.to_json if @auth and @websocket
     end
   
     def on_channel_talk(mode, msg)
       channel = msg.params[0]
-      body    = msg.params[1]
+      body    = CGI.escapeHTML(msg.params[1])
       data = {
           :from => {
             :type => 'channel',
@@ -128,9 +130,10 @@ module Setsuna
             :id => s(msg.prefix.nick || msg.prefix.host),
           },
           :mode => mode,
-          :body => s(body),
+          :body => s(IrcString.parse(body).to_html),
           :time => Time.now.to_i,
       }
+      puts data
       @websocket.send data.to_json if @auth and @websocket
     end
   
