@@ -1,6 +1,7 @@
 %html
   %head
     %title Tuna WebIRC
+    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}
     %link{:rel => 'stylesheet', :href => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'}
     %link{:rel => 'stylesheet', :href => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css'}
     %link{:rel => 'stylesheet', :href => '/css/style.css'}
@@ -22,7 +23,7 @@
       %div{:class => 'row'}
         %div{:class => 'col-md-3'}
           %form{:class => 'form-inline',  :id => 'send', :onsubmit => 'send(); return false', :style => 'display: none;'}
-            %div{:class => "form-group"}
+            %div{:class => 'form-group'}
               %input{:type => 'text', :name => 'body', :class => 'form-control'}
           %ul{:id => 'channels-tab', :class => 'nav nav-pills nav-stacked'}
         %div{:class => 'col-md-8'}
