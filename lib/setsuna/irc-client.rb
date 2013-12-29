@@ -112,8 +112,9 @@ module Setsuna
             :type => 'user',
             :id => s(from),
           },
+          :images => images(body),
           :mode => mode,
-          :body => s(IrcString.parse(body).to_html('irc_')),
+          :body => html(body),
           :time => Time.now.to_i,
       }
       puts data
@@ -129,12 +130,27 @@ module Setsuna
             :channel => s(channel),
             :id => s(msg.prefix.servername || msg.prefix.nick),
           },
+          :images => images(body),
           :mode => mode,
-          :body => s(IrcString.parse(body).to_html('irc_')),
+          :body => html(body),
           :time => Time.now.to_i,
       }
       puts data
       @websocket.send data.to_json if @auth and @websocket
+    end
+
+    def html(str)
+      str = s(IrcString.parse(str).to_html('irc_'))
+      URI.extract(str.dup, %w[http https ftp]){|uri|str.gsub!(uri, %Q{<a href="#{uri}" target="_blank">#{uri}</a>})}
+      str
+    end
+
+    def images(str)
+      images = []
+      URI.extract(str.dup, %w[http https ftp]) do |uri|
+        images << uri if uri =~ /\.(jpg|jpeg|gif|png)$/
+      end
+      images
     end
   
     def s(msg)

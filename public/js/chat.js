@@ -1,16 +1,14 @@
 var ws;
 var channels = {};
 
+function formatTime(dateStr) {
+  var timeStr = $.format.date(dateStr, "HH:mm");
+  return timeStr;
+}
 function formatDate(unixtime) {
   var time = new Date();
   time.setTime(unixtime * 1000);
-  var timeStr = $.format.date(time.toString(), "HH:mm");
-  return timeStr;
-}
-function now() {
-  var time = new Date();
-  var timeStr = $.format.date(time.toString(), "HH:mm");
-  return timeStr;
+  return formatTime(time.toString());
 }
 function connect(url) {
   ws = new WebSocket(url);
@@ -21,12 +19,10 @@ function connect(url) {
       if (!hasChannel(channel)) {
         addChannel(channel);
       }
-      channels[channel].prepend(
-        $('<p>')
-          .append($('<span>').attr({ class: 'time' }).text(formatDate(parseInt(data.time))))
-          .append($('<span>').attr({ class: 'nick' }).text(data.from.id))
-          .append($('<span>').attr({ class: 'body ' + data.mode }).html(data.body))
-      );
+      addLog(channel, formatDate(parseInt(data.time)), data.from.id, data.mode, data.body);
+      if (data.images && data.images.length > 0) {
+        addImages(channel, formatDate(parseInt(data.time)), data.from.id, data.images);
+      }
     }
   };
   ws.onopen = function(handshake) {
@@ -37,18 +33,34 @@ function connect(url) {
     $('#send').show();
   };
 }
+function addImages(channel, time, nick, images) {
+  var p = $('<p>')
+      .append($('<span>').attr({ class: 'time' }).text(time))
+      .append($('<span>').attr({ class: 'nick' }).text(nick));
+  images.forEach(function(image) {
+    p.append($('<img>').attr({ src: image }));
+  });
+  channels[channel].prepend(p);
+}
+function addLog(channel, time, nick, mode, body) {
+  var body_class = 'body';
+  if (mode) {
+    body_class += ' ' + mode;
+  }
+  channels[channel].prepend(
+    $('<p>')
+      .append($('<span>').attr({ class: 'time' }).text(time))
+      .append($('<span>').attr({ class: 'nick' }).text(nick))
+      .append($('<span>').attr({ class: body_class }).html(body))
+  );
+}
 function send() {
   var channel = $('#channels-tab li[class=active]').text();
   var body = $('input[name=body]');
   if (channel && body.val()) {
     ws.send( $.toJSON(['PRIVMSG', channel, body.val()]) );
   }
-  channels[channel].prepend(
-    $('<p>')
-      .append($('<span>').attr({ class: 'time' }).text(now()))
-      .append($('<span>').attr({ class: 'nick' }).text("ME"))
-      .append($('<span>').attr({ class: 'body' }).text(body.val()))
-  );
+  addLog(channel, formatTime(new Date()), 'ME', 'privmsg', body.val());
   body.val('');
 }
 function hasChannel(channel) {
