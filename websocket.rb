@@ -3,9 +3,9 @@
 
 $:.unshift './lib', './'
 require 'pit'
-require 'setsuna'
+require 'tuna'
 
-options = Pit.get("setsuna", :require => {
+options = Pit.get("tuna", :require => {
   :host => "IRC_HOST",
   :port => "IRC_PORT",
   :nick => "IRC_NICK",
@@ -14,6 +14,6 @@ options = Pit.get("setsuna", :require => {
   :ws_pass  => "WEBSOCKET_PASSWORD",
 })
 
-client = Setsuna::IrcClient.new options
+client = Tuna::IrcClient.new options
 client.run
 

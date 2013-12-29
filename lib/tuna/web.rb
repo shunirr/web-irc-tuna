@@ -5,13 +5,13 @@ require 'sinatra'
 require 'haml'
 require 'pit'
 
-module Setsuna 
+module Tuna 
   class Web < Sinatra::Base
     set :views, File.dirname(__FILE__) + '/../../views'
     set :public_folder, File.dirname(__FILE__) + '/../../public'
 
     configure do
-      set :pit, Pit.get("setsuna", :require => {
+      set :pit, Pit.get("tuna", :require => {
         :ws_host => "WEBSOCKET_HOST",
         :ws_port => "WEBSOCKET_PORT",
       })

@@ -2,12 +2,12 @@
 # -*- encoding: utf-8 -*-
 
 $:.unshift './lib', './'
-require 'setsuna'
+require 'tuna'
 require 'pit'
 
-options = Pit.get("setsuna", :require => {
+options = Pit.get("tuna", :require => {
   :web_port  => "WEBSOCKET_PORT"
 })
 
-Setsuna::Web.run! :port => options[:web_port]
+Tuna::Web.run! :port => options[:web_port]
 

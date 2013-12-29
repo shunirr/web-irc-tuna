@@ -9,7 +9,7 @@ require 'em-websocket'
 require 'irc-string'
 require 'cgi'
 
-module Setsuna
+module Tuna
   class IrcClient
     include Celluloid::IO
   
