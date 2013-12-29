@@ -1,6 +1,8 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    archive-zip (0.6.0)
+      io-like (>= 0.3.0)
     celluloid (0.15.2)
       timers (~> 1.1.0)
     celluloid-io (0.15.0)
@@ -10,19 +12,32 @@ GEM
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.5.3)
     eventmachine (1.0.3)
+    gqtp (1.0.5)
+    groonga-client (0.0.4)
+      gqtp (>= 1.0.4)
+      groonga-command (>= 1.0.4)
+    groonga-command (1.0.6)
+      json
     haml (4.0.4)
       tilt
     http_parser.rb (0.5.3)
+    io-like (0.3.0)
     irc-string (0.0.1)
     ircp (1.1.7)
       treetop
     json (1.8.1)
     nio4r (0.5.0)
     pit (0.0.7)
+    pkg-config (1.1.4)
     polyglot (0.3.3)
     rack (1.5.2)
     rack-protection (1.5.1)
       rack
+    rroonga (3.1.1)
+      archive-zip
+      groonga-client (>= 0.0.3)
+      json
+      pkg-config
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -45,4 +60,5 @@ DEPENDENCIES
   json
   pit
   rack
+  rroonga
   sinatra
