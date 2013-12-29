@@ -127,7 +127,7 @@ module Setsuna
           :from => {
             :type => 'channel',
             :channel => s(channel),
-            :id => s(msg.servername || msg.prefix.nick),
+            :id => s(msg.prefix.servername || msg.prefix.nick),
           },
           :mode => mode,
           :body => s(IrcString.parse(body).to_html('irc_')),
