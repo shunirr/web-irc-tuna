@@ -1,5 +1,6 @@
 .irc_bold{ font-weight: bold; }
 .irc_underline{ text-decoration: underline; }
+.irc_reverse{ direction: rtl; unicode-bidi: bidi-override; }
 .irc_color_0{ color:white }
 .irc_color_1{ color:black }
 .irc_color_2{ color:navy }
@@ -32,4 +33,3 @@
 .irc_bg_color_13{ background-color:pink }
 .irc_bg_color_14{ background-color:darkgray }
 .irc_bg_color_15{ background-color:lightgrey }
-
