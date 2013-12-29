@@ -113,7 +113,7 @@ module Setsuna
             :id => s(from),
           },
           :mode => mode,
-          :body => s(IrcString.parse(body).to_html),
+          :body => s(IrcString.parse(body).to_html('irc_')),
           :time => Time.now.to_i,
       }
       puts data
@@ -130,7 +130,7 @@ module Setsuna
             :id => s(msg.prefix.nick || msg.prefix.host),
           },
           :mode => mode,
-          :body => s(IrcString.parse(body).to_html),
+          :body => s(IrcString.parse(body).to_html('irc_')),
           :time => Time.now.to_i,
       }
       puts data
