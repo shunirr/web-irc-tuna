@@ -23,37 +23,3 @@ body {
 .notice {
   color: gray;
 }
-.irc_bold { font-weight: bold; }
-.irc_underline { text-decoration: underline; }
-.irc_color_0{ color:white }
-.irc_color_1{ color:black }
-.irc_color_2{ color:navy }
-.irc_color_3{ color:green }
-.irc_color_4{ color:red }
-.irc_color_5{ color:brown }
-.irc_color_6{ color:purple }
-.irc_color_7{ color:olive }
-.irc_color_8{ color:yellow }
-.irc_color_9{ color:limegreen }
-.irc_color_10{ color:teal }
-.irc_color_11{ color:aqua }
-.irc_color_12{ color:blue }
-.irc_color_13{ color:pink }
-.irc_color_14{ color:darkgray }
-.irc_color_15{ color:lightgrey }
-.irc_bg_color_0{ background-color:white }
-.irc_bg_color_1{ background-color:black }
-.irc_bg_color_2{ background-color:navy }
-.irc_bg_color_3{ background-color:green }
-.irc_bg_color_4{ background-color:red }
-.irc_bg_color_5{ background-color:brown }
-.irc_bg_color_6{ background-color:purple }
-.irc_bg_color_7{ background-color:olive }
-.irc_bg_color_8{ background-color:yellow }
-.irc_bg_color_9{ background-color:limegreen }
-.irc_bg_color_10{ background-color:teal }
-.irc_bg_color_11{ background-color:aqua }
-.irc_bg_color_12{ background-color:blue }
-.irc_bg_color_13{ background-color:pink }
-.irc_bg_color_14{ background-color:darkgray }
-.irc_bg_color_15{ background-color:lightgrey }
