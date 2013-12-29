@@ -60,7 +60,6 @@ function send() {
   if (channel && body.val()) {
     ws.send( $.toJSON(['PRIVMSG', channel, body.val()]) );
   }
-  addLog(channel, formatTime(new Date()), 'ME', 'privmsg', body.val());
   body.val('');
 }
 function hasChannel(channel) {

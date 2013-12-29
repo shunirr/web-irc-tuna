@@ -28,6 +28,14 @@ module Tuna
   
     def send(*args)
       msg = Ircp::Message.new(*args)
+
+      case msg.command
+      when 'PRIVMSG'
+        on_privmsg msg
+      when 'NOTICE'
+        on_notice msg
+      end
+
       puts "SEND: #{msg}"
       @socket.write msg.to_irc
     end
@@ -89,7 +97,7 @@ module Tuna
     end
   
     def on_privmsg(msg)
-      if msg.prefix
+      if msg.params[0] =~ /^#/
         on_channel_talk :privmsg, msg
       else
         on_private_talk :privmsg, msg
@@ -97,7 +105,7 @@ module Tuna
     end
   
     def on_notice(msg)
-      if msg.prefix
+      if msg.params[0] =~ /^#/
         on_channel_talk :notice, msg
       else
         on_private_talk :notice, msg
@@ -110,7 +118,7 @@ module Tuna
       data = {
           :from => {
             :type => 'user',
-            :id => s(from),
+            :id => s(from || @nick),
           },
           :images => images(body),
           :mode => mode,
@@ -124,11 +132,12 @@ module Tuna
     def on_channel_talk(mode, msg)
       channel = msg.params[0]
       body    = CGI.escapeHTML(msg.params[1])
+      nick    = msg.prefix.servername || msg.prefix.nick if msg.prefix
       data = {
           :from => {
             :type => 'channel',
             :channel => s(channel),
-            :id => s(msg.prefix.servername || msg.prefix.nick),
+            :id => s(nick || @nick),
           },
           :images => images(body),
           :mode => mode,
