@@ -12,12 +12,19 @@
     %script{:src => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js'}
   %body
     %div{:class => 'container'}
-      %ul{:id => 'channels-tab', :class => 'nav nav-tabs'}
+      %nav{:class => 'navbar navbar-inverse navbar-fixed-top', :role => 'navigation'}
+        %div{:class => 'navbar-header'}
+          %a{:class=>'navbar-brand'} Setsuna
+      
       %form{:class => 'form-inline',  :id => 'auth', :onsubmit => "connect('#{locals[:url]}'); return false"}
         %input{:type => 'password', :name => 'pass', :class => 'form-control'}
-        %button{:class => 'btn btn-primary'} connect
-      %form{:class => 'form-inline',  :id => 'send', :onsubmit => 'send(); return false', :style => 'display: none;'}
-        %input{:type => 'text', :name => 'body', :class => 'form-control'}
-        %button{:class => 'btn btn-primary'} send
-      %div{:id => 'channels', :class => 'tab-content'}
+
+      %div{:class => 'row'}
+        %div{:class => 'col-md-3'}
+          %form{:class => 'form-inline',  :id => 'send', :onsubmit => 'send(); return false', :style => 'display: none;'}
+            %div{:class => "form-group"}
+              %input{:type => 'text', :name => 'body', :class => 'form-control'}
+          %ul{:id => 'channels-tab', :class => 'nav nav-pills nav-stacked'}
+        %div{:class => 'col-md-8'}
+          %div{:id => 'channels', :class => 'tab-content'}
     %script{:src => '/js/chat.js'}

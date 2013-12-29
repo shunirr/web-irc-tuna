@@ -6,6 +6,7 @@
 }
 body {
   font-family: 'Average Sans', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', sans-serif, EmojiSymbols;
+  padding-top: 70px;
 }
 
 .time, .nick {
