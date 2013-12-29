@@ -21,7 +21,7 @@ function connect(url) {
       if (!hasChannel(channel)) {
         addChannel(channel);
       }
-      channels[channel].append(
+      channels[channel].prepend(
         $('<p>')
           .append($('<span>').attr({ class: 'time' }).text(formatDate(parseInt(data.time))))
           .append($('<span>').attr({ class: 'nick' }).text(data.from.id))
@@ -43,7 +43,7 @@ function send() {
   if (channel && body.val()) {
     ws.send( $.toJSON(['PRIVMSG', channel, body.val()]) );
   }
-  channels[channel].append(
+  channels[channel].prepend(
     $('<p>')
       .append($('<span>').attr({ class: 'time' }).text(now()))
       .append($('<span>').attr({ class: 'nick' }).text("ME"))
