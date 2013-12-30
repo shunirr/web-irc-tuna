@@ -8,6 +8,7 @@ require 'pit'
 require 'em-websocket'
 require 'irc-string'
 require 'cgi'
+require 'groonga'
 
 module Tuna
   class IrcClient
@@ -114,7 +115,7 @@ module Tuna
   
     def on_private_talk(mode, msg)
       from = msg.params[0]
-      body = CGI.escapeHTML(msg.params[1])
+      body = CGI.escapeHTML(msg.params[1]) if msg.params[1]
       data = {
           :from => {
             :type => 'user',
@@ -131,7 +132,7 @@ module Tuna
   
     def on_channel_talk(mode, msg)
       channel = msg.params[0]
-      body    = CGI.escapeHTML(msg.params[1])
+      body    = CGI.escapeHTML(msg.params[1]) if msg.params[1]
       nick    = msg.prefix.servername || msg.prefix.nick if msg.prefix
       data = {
           :from => {
