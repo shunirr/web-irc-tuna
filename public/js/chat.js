@@ -10,7 +10,26 @@ function formatDate(unixtime) {
   time.setTime(unixtime * 1000);
   return formatTime(time.toString());
 }
+function loadChannels() {
+  $.getJSON("/api/v1/networks/1/channels", function(data) {
+    data.forEach(function(d) {
+      var channel = d.name;
+      if (!hasChannel(channel)) {
+        addChannel(channel);
+        loadRecentLogs(d.name, d.id);
+      }
+    });
+  });
+}
+function loadRecentLogs(channel_name, channel_id) {
+  $.getJSON("/api/v1/channels/"+channel_id+"/logs", function(data) {
+    data.forEach(function(d) {
+      addLog(channel_name, formatDate(parseInt(d.created_at)), d.from, d.command, d.message);
+    });
+  });
+}
 function connect(url) {
+  loadChannels();
   ws = new WebSocket(url);
   ws.onmessage = function(evt) {
     var data = JSON.parse(evt.data);
