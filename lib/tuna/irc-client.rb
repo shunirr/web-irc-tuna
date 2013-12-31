@@ -159,6 +159,7 @@ module Tuna
     end
 
     def html(str)
+      str ||= ''
       str = s(IrcString.parse(str).to_html('irc_'))
       URI.extract(str.dup, %w[http https ftp]){|uri|str.gsub!(uri, %Q{<a href="#{uri}" target="_blank">#{uri}</a>})}
       str
