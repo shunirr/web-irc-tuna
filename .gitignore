@@ -4,3 +4,4 @@ log.*.txt
 log.txt
 *.pidfile
 db/*.db
+db/*.db.*

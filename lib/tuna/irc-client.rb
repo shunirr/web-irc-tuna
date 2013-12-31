@@ -23,7 +23,10 @@ module Tuna
       @pass = options[:pass]
       @ws_port = options[:ws_port]
       @ws_pass = options[:ws_pass]
-  
+
+      @database = Groonga::Database.open('db/groonga.db')
+      @network = (Model::Network.find_by_name('default') || Model::Network.new(:name => 'default')).save
+
       @socket = TCPSocket.new @host, @port
     end
   
@@ -131,9 +134,10 @@ module Tuna
     end
   
     def on_channel_talk(mode, msg)
-      channel = msg.params[0]
-      body    = CGI.escapeHTML(msg.params[1]) if msg.params[1]
-      nick    = msg.prefix.servername || msg.prefix.nick if msg.prefix
+      channel   = msg.params[0]
+      body      = CGI.escapeHTML(msg.params[1]) if msg.params[1]
+      body_html = html body
+      nick      = msg.prefix.servername || msg.prefix.nick if msg.prefix
       data = {
           :from => {
             :type => 'channel',
@@ -142,10 +146,14 @@ module Tuna
           },
           :images => images(body),
           :mode => mode,
-          :body => html(body),
+          :body => body_html,
           :time => Time.now.to_i,
       }
       puts data
+
+      c = Model::Channel.new(:name => channel, :network => @network).save
+      Model::Log.new(:command => mode, :from => nick, :message => body_html, :channel => c).save
+
       @websocket.send data.to_json if @auth and @websocket
     end
 
