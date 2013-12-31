@@ -1,3 +1,4 @@
+require 'json'
 
 module Tuna::Model
   class Channel
@@ -6,27 +7,53 @@ module Tuna::Model
     # table.text("topic")
     # table.reference("network", "Networks") # freenode
 
-    attr_accessor :name, :network, :topic
+    attr_accessor :id, :name, :network, :topic
 
     def initialize(args = {})
       if args[:record]
         @name    = args[:record].name
-        @network = args[:record].network
+        @network = Network.new(:record => args[:record].network)
         @topic   = args[:record].topic || ''
-        @id      = args[:record].key
+        @id      = args[:record].id
       else
         @name    = args[:name]
         @network = args[:network]
         @topic   = args[:topic] || ''
-        record = find_record(@network, @name)
-        if record
-          @id = record.key
-        end
       end
+    end
+
+    def to_json(*args)
+      JSON.generate({
+        :id => @id,
+        :name => @name,
+        :topic => @topic,
+      })
     end
 
     def record
       Groonga['Channels'][@id]
+    end
+
+    def self.find_by_network_and_name(network, name)
+      if network.is_a? Network
+        network = network.record
+      end
+      Groonga['Channels'].each do |record|
+        if record.network == network and record.name == name
+          return Channel.new(:record => record)
+          break
+        end
+      end
+      nil
+    end
+
+    def self.find_by_id(id)
+      channel = Groonga['Channels'][id]
+      if channel
+        Channel.new(:record => channel)
+      else
+        nil
+      end
     end
 
     def self.find_all
@@ -38,6 +65,9 @@ module Tuna::Model
     end
 
     def self.find_by_network(network)
+      if network.is_a? Network
+        network = network.record
+      end
       channels = []
       Groonga['Channels'].each do |record|
         channels << record if record.network == network
@@ -46,26 +76,14 @@ module Tuna::Model
     end
 
     def save
-      data = {:name => @name, :network => @network.record, :topic => @topic}
-      p data
       if @id
-        Groonga['Channels'][@id] = data
+        Groonga['Channels'][@id][:name]    = @name
+        Groonga['Channels'][@id][:network] = @network.record
+        Groonga['Channels'][@id][:topic]   = @topic
       else
-        @id = Groonga['Channels'].add(data)
+        @id = Groonga['Channels'].add(:name => @name, :network => @network.record, :topic => @topic)
       end
       self
-    end
-
-    private
-    def find_record(network, name)
-      channel = nil
-      Groonga['Channels'].each do |record|
-        if record.network == network and record.name == name
-          channel = record
-          break
-        end
-      end
-      channel
     end
   end
 end

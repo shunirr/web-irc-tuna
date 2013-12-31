@@ -151,7 +151,7 @@ module Tuna
       }
       puts data
 
-      c = Model::Channel.new(:name => channel, :network => @network).save
+      c = (Model::Channel.find_by_network_and_name(@network, channel) || Model::Channel.new(:name => channel, :network => @network)).save
       Model::Log.new(:command => mode, :from => nick, :message => body_html, :channel => c).save
 
       @websocket.send data.to_json if @auth and @websocket

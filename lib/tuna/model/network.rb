@@ -7,34 +7,42 @@ module Tuna::Model
 
     def initialize(args = {})
       if args[:record]
-        @id   = args[:record].key
+        @id   = args[:record].id
         @name = args[:record].name
       else
         @name = args[:name]
       end
     end
 
-    def self.find_all
-      networks = []
-      Groonga['Networks'].each do |record|
-        networks << record
-      end
-      networks.map{|r| Network.new(:record => r)}
+    def to_json(*args)
+      JSON.generate({
+        :id   => @id,
+        :name => @name,
+      })
     end
 
-    def self.find_by_name(name)
-      network = nil
-      Groonga['Networks'].each do |record|
-        if record.name == name
-          network = record
-          break
-        end
+    def self.find_all
+      Groonga['Networks'].map do |record|
+        Network.new :record => record
       end
+    end
+
+    def self.find_by_id(id)
+      network = Groonga['Networks'][id]
       if network
         Network.new(:record => network)
       else
         nil
       end
+    end
+
+    def self.find_by_name(name)
+      Groonga['Networks'].each do |record|
+        if record.name == name
+          return Network.new(:record => record)
+        end
+      end
+      nil
     end
 
     def record
@@ -44,7 +52,7 @@ module Tuna::Model
     def save
       data = {:name => @name}
       if @id
-        Groonga['Networks'][@id] = data
+        Groonga['Networks'][@id][:name] = @name
       else
         @id = Groonga['Networks'].add data
       end
