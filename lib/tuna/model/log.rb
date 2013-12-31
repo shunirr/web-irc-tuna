@@ -34,11 +34,11 @@ module Tuna::Model
       end
       count = args[:count] || 10
       logs = []
-      Groonga['Logs'].map do |record|
+      Groonga['Logs'].sort([{:key => 'created_at', :order => :desc}]).each do |record|
         logs << Log.new(:record => record) if record.channel == channel
         break if logs.size >= count
       end
-      logs
+      logs.reverse
     end
 
     def to_json(*args)
