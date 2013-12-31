@@ -157,8 +157,10 @@ module Tuna
 
     def images(str)
       images = []
-      URI.extract(str.dup, %w[http https ftp]) do |uri|
-        images << uri if uri =~ /\.(jpg|jpeg|gif|png)$/
+      if str
+        URI.extract(str.dup, %w[http https ftp]) do |uri|
+          images << uri if uri =~ /\.(jpg|jpeg|gif|png)$/
+        end
       end
       images
     end
