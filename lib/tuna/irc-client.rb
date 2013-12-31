@@ -138,11 +138,12 @@ module Tuna
       body      = CGI.escapeHTML(msg.params[1]) if msg.params[1]
       body_html = html body
       nick      = msg.prefix.servername || msg.prefix.nick if msg.prefix
+      nick = s(nick || @nick)
       data = {
           :from => {
             :type => 'channel',
             :channel => s(channel),
-            :id => s(nick || @nick),
+            :id => nick
           },
           :images => images(body),
           :mode => mode,
