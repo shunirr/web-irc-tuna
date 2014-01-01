@@ -1,7 +1,9 @@
 require 'time'
+require 'uuidtools'
 
 module Tuna::Model
   class Log
+    # table.text("uuid")
     # table.text("command")                  # PRIVMSG
     # table.text("from")                     # shunirr
     # table.text("message")                  # hogehgoe
@@ -12,6 +14,8 @@ module Tuna::Model
 
     def initialize(args = {})
       if args[:record]
+        @id = args[:record].id
+        @uuid = args[:record].uuid
         @log = {
           :command    => args[:record].command,
           :from       => args[:record].from,
@@ -34,7 +38,7 @@ module Tuna::Model
       end
       count = args[:count] || 10
       logs = []
-      Groonga['Logs'].sort([{:key => 'created_at', :order => :desc}]).each do |record|
+      Groonga['Logs'].sort(['created_at']).each do |record|
         logs << Log.new(:record => record) if record.channel == channel
         break if logs.size >= count
       end
@@ -43,6 +47,7 @@ module Tuna::Model
 
     def to_json(*args)
       JSON.generate({
+        :uuid       => @uuid,
         :command    => @log[:command],
         :from       => @log[:from],
         :message    => @log[:message],
@@ -55,6 +60,7 @@ module Tuna::Model
     end
 
     def save
+      @log[:uuid] = UUIDTools::UUID.random_create.to_s
       @id = Groonga['Logs'].add @log
       self
     end

@@ -16,6 +16,7 @@ Groonga::Schema.define do |schema|
   end
 
   schema.create_table("Logs", :type => :array) do |table|
+    table.text("uuid")                     # UUID
     table.text("command")                  # PRIVMSG
     table.text("from")                     # shunirr
     table.text("message")                  # hogehgoe

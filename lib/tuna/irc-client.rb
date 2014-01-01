@@ -32,15 +32,12 @@ module Tuna
   
     def send(*args)
       msg = Ircp::Message.new(*args)
-
       case msg.command
       when 'PRIVMSG'
         on_privmsg msg
       when 'NOTICE'
         on_notice msg
       end
-
-      puts "SEND: #{msg}"
       @socket.write msg.to_irc
     end
   
