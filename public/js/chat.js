@@ -1,6 +1,29 @@
 var ws;
 var channels = {};
 
+$(window).on("scroll", function() {
+  var scrollHeight = $(document).height();
+  var scrollPosition = $(window).height() + $(window).scrollTop();
+  if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+    onFooterShown();
+  }
+});
+
+var loading = false;
+function onFooterShown() {
+  if (!loading) {
+    loding = true;
+    var offset = $('div[class="tab-pane active"] p').last().attr('id');
+    var channel_id = parseInt($('li[class="active"] a').attr('href').substr(1));
+    $.getJSON("/api/v1/channels/" + channel_id + "/logs?offset=" + offset, function(data) {
+      data.reverse().forEach(function(d) {
+        addLog(d.channel, formatDate(parseInt(d.created_at)), d.from, d.command, d.message, d.uuid, true);
+      });
+      loading = false;
+    });
+  }
+}
+
 function formatTime(dateStr) {
   var timeStr = $.format.date(dateStr, "HH:mm");
   return timeStr;
@@ -26,7 +49,7 @@ function loadChannels() {
 function loadRecentLogs(channel) {
   $.getJSON("/api/v1/channels/" + channel.id + "/logs", function(data) {
     data.forEach(function(d) {
-      addLog(channel, formatDate(parseInt(d.created_at)), d.from, d.command, d.message);
+      addLog(channel, formatDate(parseInt(d.created_at)), d.from, d.command, d.message, d.uuid);
     });
   });
 }
@@ -41,7 +64,7 @@ function connect() {
     if (!hasChannel(channel)) {
       addChannel(channel);
     }
-    addLog(channel, formatDate(parseInt(data.created_at)), data.from, data.command, data.message);
+    addLog(channel, formatDate(parseInt(data.created_at)), data.from, data.command, data.message, data.uuid);
   };
 
   ws.onopen = function(handshake) {
@@ -63,18 +86,25 @@ function addImages(channel, time, nick, images) {
   channels[channel].prepend(p);
 }
 
-function addLog(channel, time, nick, mode, body) {
+function addLog(channel, time, nick, mode, body, id, isAppend) {
+  if (typeof isAppend === 'undefined') {
+    isAppend = false;
+  }
   if (body) {
     var body_class = 'body';
     if (mode) {
       body_class += ' ' + mode;
     }
-    channels[channel.id].prepend(
-      $('<p>')
+    var p = $('<p>')
+        .attr({id: id})
         .append($('<span>').attr({ class: 'time' }).text(time))
         .append($('<span>').attr({ class: 'nick' }).text(nick))
-        .append($('<span>').attr({ class: body_class }).html(body))
-    );
+        .append($('<span>').attr({ class: body_class }).html(body));
+    if (isAppend) {
+      channels[channel.id].append(p);
+    } else {
+      channels[channel.id].prepend(p);
+    }
 
     var children = channels[channel.id].children();
     if (children.length > 50) {

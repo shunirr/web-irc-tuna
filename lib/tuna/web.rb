@@ -44,7 +44,7 @@ module Tuna
       count  = (params[:count] || '10').to_i
       offset = params[:offset]
       channel = Model::Channel.find_by_id(id)
-      Model::Log.find_by_channel(channel, :count => count).to_json
+      Model::Log.find_by_channel(channel, :count => count, :offset => offset).to_json
     end
   end
 end
