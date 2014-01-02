@@ -41,8 +41,10 @@ module Tuna
     get '/api/v1/channels/:id/logs' do
       content_type :json
       id = params[:id].to_i
+      count  = (params[:count] || '10').to_i
+      offset = params[:offset]
       channel = Model::Channel.find_by_id(id)
-      Model::Log.find_by_channel(channel, :count => 10).to_json
+      Model::Log.find_by_channel(channel, :count => count).to_json
     end
   end
 end

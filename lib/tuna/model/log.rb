@@ -37,9 +37,15 @@ module Tuna::Model
         channel = channel.record
       end
       count = args[:count] || 10
+      offset = args[:offset]
       logs = []
+      start = (offset) ? false : true
       Groonga['Logs'].sort([{:key => 'created_at', :order => :desc}]).each do |record|
-        logs << Log.new(:record => record) if record.channel == channel
+        if start
+          logs << Log.new(:record => record) if record.channel == channel
+        else
+          start = record.uuid == offset
+        end
         break if logs.size >= count
       end
       logs.reverse
