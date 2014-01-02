@@ -9,7 +9,7 @@ web() {
     echo "kill web server"
     kill `cat $WEB_PID`
     rm $WEB_PID
-    sleep 0.1
+    sleep 0.2
   fi
   
   echo "start web server"
@@ -22,7 +22,7 @@ websocket() {
     echo "kill websocket server"
     kill `cat $WS_PID`
     rm $WS_PID
-    sleep 0.1
+    sleep 0.2
   fi
   
   echo "start websocket server"

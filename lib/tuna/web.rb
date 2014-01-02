@@ -9,11 +9,12 @@ require 'groonga'
 
 module Tuna 
   class Web < Sinatra::Base
-
-    set :views, File.dirname(__FILE__) + '/../../views'
-    set :public_folder, File.dirname(__FILE__) + '/../../public'
+    # use Login
 
     configure do
+      set :views, File.dirname(__FILE__) + '/../../views'
+      set :public_folder, File.dirname(__FILE__) + '/../../public'
+
       Groonga::Database.open('db/groonga.db')
       set :pit, Pit.get("tuna", :require => {
         :ws_host => "WEBSOCKET_HOST",

@@ -31,9 +31,9 @@ function loadRecentLogs(channel) {
   });
 }
 
-function connect(url) {
+function connect() {
   loadChannels();
-  ws = new WebSocket(url);
+  ws = new WebSocket(ws_url);
 
   ws.onmessage = function(evt) {
     var data = JSON.parse(JSON.parse(evt.data));

@@ -2,23 +2,29 @@
   %head
     %title Tuna WebIRC
     %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}
+
     %link{:rel => 'stylesheet', :href => 'http://fonts.googleapis.com/css?family=Average+Sans'}
     %link{:rel => 'stylesheet', :href => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'}
     %link{:rel => 'stylesheet', :href => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css'}
     %link{:rel => 'stylesheet', :href => '/css/style.css'}
     %link{:rel => 'stylesheet', :href => '/css/irc_color.css'}
+
+    :javascript
+      var ws_url = "#{locals[:url]}"
     %script{:src => 'http://code.jquery.com/jquery-1.10.2.min.js'}
     %script{:src => 'http://static.s5r.jp/js/jquery-dateFormat.min.js'}
     %script{:src => 'http://static.s5r.jp/js/jquery.json-2.4.min.js'}
+    %script{:src => 'http://static.s5r.jp/js/jquery.cookie.js'}
     %script{:src => 'http://static.s5r.jp/js/md5.js'}
     %script{:src => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js'}
+
   %body
     %div{:class => 'container'}
       %nav{:class => 'navbar navbar-inverse navbar-fixed-top', :role => 'navigation'}
         %div{:class => 'navbar-header'}
           %a{:class=>'navbar-brand'} Tuna
       
-      %form{:class => 'form-inline',  :id => 'auth', :onsubmit => "connect('#{locals[:url]}'); return false"}
+      %form{:class => 'form-inline', :id => 'auth', :onsubmit => "connect(); return false"}
         %input{:type => 'password', :name => 'pass', :class => 'form-control'}
 
       %div{:class => 'row'}
@@ -29,4 +35,5 @@
           %ul{:id => 'channels-tab', :class => 'nav nav-pills nav-stacked'}
         %div{:class => 'col-md-8'}
           %div{:id => 'channels', :class => 'tab-content'}
+
     %script{:src => '/js/chat.js'}

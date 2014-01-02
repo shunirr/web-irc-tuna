@@ -5,6 +5,7 @@ require 'groonga'
 
 module Tuna
   autoload :Web,       'tuna/web'
+  autoload :Login,     'tuna/login'
   autoload :IrcClient, 'tuna/irc-client'
 
   module Model
