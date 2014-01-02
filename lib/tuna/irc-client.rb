@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+require 'net/http'
+require 'uri'
 require 'celluloid/io'
 require 'ircp'
 require 'json'
@@ -115,7 +117,7 @@ module Tuna
     def on_message(mode, msg)
       channel   = s(msg.params[0])
       body      = CGI.escapeHTML(msg.params[1]) if msg.params[1]
-      body_html = html(body)
+      body_html = html(expand_short_url(body))
       if msg.prefix
         nick = s(msg.prefix.servername || msg.prefix.nick)
       else
@@ -124,6 +126,20 @@ module Tuna
       c = (Model::Channel.find_by_network_and_name(@network, channel) || Model::Channel.new(:name => channel, :network => @network)).save
       log = Model::Log.new(:command => mode.to_s, :from => nick, :message => body_html, :channel => c).save
       websocket_send log.to_json
+    end
+
+    def expand_short_url(str)
+      URI.extract(str.dup, %w[http https]) do |u|
+        uri = URI.parse u
+        if uri.host == 't.co'
+          begin
+            response = Net::HTTP.get_response uri
+            str.gsub!(u, response['location']) if response['location']
+          rescue => e
+          end
+        end
+      end
+      str
     end
 
     def html(str)

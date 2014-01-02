@@ -64,16 +64,18 @@ function addImages(channel, time, nick, images) {
 }
 
 function addLog(channel, time, nick, mode, body) {
-  var body_class = 'body';
-  if (mode) {
-    body_class += ' ' + mode;
+  if (body) {
+    var body_class = 'body';
+    if (mode) {
+      body_class += ' ' + mode;
+    }
+    channels[channel.id].prepend(
+      $('<p>')
+        .append($('<span>').attr({ class: 'time' }).text(time))
+        .append($('<span>').attr({ class: 'nick' }).text(nick))
+        .append($('<span>').attr({ class: body_class }).html(body))
+    );
   }
-  channels[channel.id].prepend(
-    $('<p>')
-      .append($('<span>').attr({ class: 'time' }).text(time))
-      .append($('<span>').attr({ class: 'nick' }).text(nick))
-      .append($('<span>').attr({ class: body_class }).html(body))
-  );
 }
 
 function send() {
