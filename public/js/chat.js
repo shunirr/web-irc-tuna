@@ -75,6 +75,11 @@ function addLog(channel, time, nick, mode, body) {
         .append($('<span>').attr({ class: 'nick' }).text(nick))
         .append($('<span>').attr({ class: body_class }).html(body))
     );
+
+    var children = channels[channel.id].children();
+    if (children.length > 50) {
+      children.last().remove();
+    }
   }
 }
 
