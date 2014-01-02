@@ -15,13 +15,13 @@ module Tuna::Model
     def initialize(args = {})
       if args[:record]
         @id = args[:record].id
-        @uuid = args[:record].uuid
         @log = {
           :command    => args[:record].command,
           :from       => args[:record].from,
           :message    => args[:record].message,
           :created_at => args[:record].created_at,
           :channel    => args[:record].channel,
+          :uuid       => args[:record].uuid,
         }
       else
         @log = args
@@ -38,7 +38,7 @@ module Tuna::Model
       end
       count = args[:count] || 10
       logs = []
-      Groonga['Logs'].sort(['created_at']).each do |record|
+      Groonga['Logs'].sort([{:key => 'created_at', :order => :desc}]).each do |record|
         logs << Log.new(:record => record) if record.channel == channel
         break if logs.size >= count
       end
@@ -47,11 +47,12 @@ module Tuna::Model
 
     def to_json(*args)
       JSON.generate({
-        :uuid       => @uuid,
+        :uuid       => @log[:uuid],
         :command    => @log[:command],
         :from       => @log[:from],
         :message    => @log[:message],
         :created_at => @log[:created_at].to_i,
+        :channel    => Channel.new(:record => @log[:channel]),
       })
     end
 
@@ -60,8 +61,8 @@ module Tuna::Model
     end
 
     def save
-      @log[:uuid] = UUIDTools::UUID.random_create.to_s
-      @id = Groonga['Logs'].add @log
+      @log[:uuid] = UUIDTools::UUID.random_create.to_s unless @log[:uuid]
+      @id = Groonga['Logs'].add(@log).id
       self
     end
   end

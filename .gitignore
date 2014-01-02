@@ -2,6 +2,7 @@
 vendor/bundle
 log.*.txt
 log.txt
+*.log
 *.pidfile
 db/*.db
 db/*.db.*

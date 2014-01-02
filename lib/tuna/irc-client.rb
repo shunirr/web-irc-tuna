@@ -40,6 +40,12 @@ module Tuna
       end
       @socket.write msg.to_irc
     end
+
+    def websocket_send(msg)
+      if @auth and @websocket
+        @websocket.send msg.to_json
+      end
+    end
   
     def run
       attach
@@ -78,7 +84,8 @@ module Tuna
       else
         @auth = auth msg
         unless @auth
-          ws.send 'password incorrect'
+          ws.send '{"error":{"description":"password incorrect"}}'
+          # ws.close
         end
       end
     end
@@ -98,61 +105,25 @@ module Tuna
     end
   
     def on_privmsg(msg)
-      if msg.params[0] =~ /^#/
-        on_channel_talk :privmsg, msg
-      else
-        on_private_talk :privmsg, msg
-      end
+      on_message :privmsg, msg
     end
   
     def on_notice(msg)
-      if msg.params[0] =~ /^#/
-        on_channel_talk :notice, msg
-      else
-        on_private_talk :notice, msg
-      end
+      on_message :notice, msg
     end
-  
-    def on_private_talk(mode, msg)
-      from = msg.params[0]
-      body = CGI.escapeHTML(msg.params[1]) if msg.params[1]
-      data = {
-          :from => {
-            :type => 'user',
-            :id => s(from || @nick),
-          },
-          :images => images(body),
-          :mode => mode,
-          :body => html(body),
-          :time => Time.now.to_i,
-      }
-      puts data
-      @websocket.send data.to_json if @auth and @websocket
-    end
-  
-    def on_channel_talk(mode, msg)
-      channel   = msg.params[0]
+
+    def on_message(mode, msg)
+      channel   = s(msg.params[0])
       body      = CGI.escapeHTML(msg.params[1]) if msg.params[1]
-      body_html = html body
-      nick      = msg.prefix.servername || msg.prefix.nick if msg.prefix
-      nick = s(nick || @nick)
-      data = {
-          :from => {
-            :type => 'channel',
-            :channel => s(channel),
-            :id => nick
-          },
-          :images => images(body),
-          :mode => mode,
-          :body => body_html,
-          :time => Time.now.to_i,
-      }
-      puts data
-
+      body_html = html(body)
+      if msg.prefix
+        nick = s(msg.prefix.servername || msg.prefix.nick)
+      else
+        nick = @nick
+      end
       c = (Model::Channel.find_by_network_and_name(@network, channel) || Model::Channel.new(:name => channel, :network => @network)).save
-      Model::Log.new(:command => mode, :from => nick, :message => body_html, :channel => c).save
-
-      @websocket.send data.to_json if @auth and @websocket
+      log = Model::Log.new(:command => mode.to_s, :from => nick, :message => body_html, :channel => c).save
+      websocket_send log.to_json
     end
 
     def html(str)
