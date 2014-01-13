@@ -10,16 +10,17 @@ require 'json'
 require 'irc-string'
 require 'net/http'
 require 'cgi'
+require 'yaml'
 
 module Tuna 
   class Chat < Sinatra::Base
     register Sinatra::RocketIO
     io = Sinatra::RocketIO
     irc = IrcEvent.new
-
-    options = Pit.get('tuna')
+    config = YAML.load(open('config.yaml').read)
+    options = config['networks'][0]['network']['settings']
     EM::defer do
-      EM.connect(options[:host], options[:port], IrcClient, options, irc)
+      EM.connect(options['host'], options['port'], IrcClient, options, irc)
     end
 
     configure do

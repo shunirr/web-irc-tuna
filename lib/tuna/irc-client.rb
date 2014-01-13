@@ -7,10 +7,10 @@ require 'eventmachine'
 module Tuna
   class IrcClient < EM::Connection
     def initialize(options, event)
-      @nick = options[:nick]
-      @user = options[:user] || @nick
-      @real = options[:real] || @nick
-      @pass = options[:pass]
+      @nick = options['nick']
+      @user = options['user'] || @nick
+      @real = options['real'] || @nick
+      @pass = options['pass']
       @event = event
 #      @event.on :privmsg do |msg|
 #        puts msg.to_s
