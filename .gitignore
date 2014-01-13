@@ -6,3 +6,4 @@ log.txt
 *.pidfile
 db/*.db
 db/*.db.*
+config.yaml
