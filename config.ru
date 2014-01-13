@@ -6,4 +6,4 @@ require 'tuna'
 require 'yaml'
 
 options = YAML.load(open('config.yaml').read)
-Tuna::Web.run! :port => options['grobal']['web']['port']
+Tuna::Web.run! :port => options['global']['web']['port']

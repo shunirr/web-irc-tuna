@@ -1,4 +1,4 @@
-grobal:
+global:
   web:
     port: 12345
   websocket:
