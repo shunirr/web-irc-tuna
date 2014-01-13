@@ -1,25 +1,23 @@
-global:
-  web:
-    port: 12345
-  websocket:
-    port: 23456
-  networks:
-    - network:
-        identify: 'tig'
-        settings:
-          host: '127.0.0.1'
-          port: 6667
-          name: 'yui'
-          nick: 'yui'
-          user: 'yui/tig'
-          pass: 'password'
-    - network:
-        identify: 'freenode'
-        settings:
-          host: '127.0.0.1'
-          port: 6667
-          name: 'yui'
-          nick: 'yui'
-          user: 'yui/fn'
-          pass: 'password'
-    
+web:
+  port: 12345
+websocket:
+  port: 23456
+networks:
+  - network:
+      identify: 'tig'
+      settings:
+        host: '127.0.0.1'
+        port: 6667
+        name: 'yui'
+        nick: 'yui'
+        user: 'yui/tig'
+        pass: 'password'
+  - network:
+      identify: 'freenode'
+      settings:
+        host: '127.0.0.1'
+        port: 6667
+        name: 'yui'
+        nick: 'yui'
+        user: 'yui/fn'
+        pass: 'password'
