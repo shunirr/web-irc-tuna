@@ -1,48 +1,15 @@
 #!/bin/bash
 WEB_PID="web.pidfile"
-WS_PID="ws.pidfile"
 WEB_LOG="web.log"
-WS_LOG="ws.log"
 
-web() {
-  if [ -f $WEB_PID ]; then
-    echo "kill web server"
-    kill `cat $WEB_PID`
-    rm $WEB_PID
-    sleep 0.2
-  fi
-  
-  echo "start web server"
-  bundle exec rackup >$WEB_LOG 2>&1 &
-  echo $! >$WEB_PID
-}
-
-websocket() {
-  if [ -f $WS_PID ]; then
-    echo "kill websocket server"
-    kill `cat $WS_PID`
-    rm $WS_PID
-    sleep 0.2
-  fi
-  
-  echo "start websocket server"
-  bundle exec ruby ./websocket.rb >$WS_LOG 2>&1 &
-  echo $! >$WS_PID
-}
-
-if [ $# == 0 ]; then
-  web
-  sleep 0.1
-  websocket
-else
-  while [ "$1" != "" ]; do
-    case "$1" in
-      "web" )       web ;;
-      "websocket" ) websocket ;;
-      *) break ;;
-    esac
-    sleep 0.1
-    shift
-  done
+if [ -f $WEB_PID ]; then
+  echo "kill web server"
+  kill `cat $WEB_PID`
+  rm $WEB_PID
+  sleep 0.2
 fi
+
+echo "start web server"
+bundle exec rackup -s thin >$WEB_LOG 2>&1 &
+echo $! >$WEB_PID
 

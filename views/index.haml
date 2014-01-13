@@ -9,14 +9,13 @@
     %link{:rel => 'stylesheet', :href => '/css/style.css'}
     %link{:rel => 'stylesheet', :href => '/css/irc_color.css'}
 
-    :javascript
-      var ws_url = "#{locals[:url]}"
-    %script{:src => 'http://code.jquery.com/jquery-1.10.2.min.js'}
+    %script{:src => '//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js'}
     %script{:src => 'http://static.s5r.jp/js/jquery-dateFormat.min.js'}
     %script{:src => 'http://static.s5r.jp/js/jquery.json-2.4.min.js'}
     %script{:src => 'http://static.s5r.jp/js/jquery.cookie.js'}
     %script{:src => 'http://static.s5r.jp/js/md5.js'}
     %script{:src => '//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js'}
+    %script{:src => rocketio_js}
 
   %body
     %div{:class => 'container'}
@@ -24,12 +23,9 @@
         %div{:class => 'navbar-header'}
           %a{:class=>'navbar-brand'} Tuna
       
-      %form{:class => 'form-inline', :id => 'auth', :onsubmit => "connect(); return false"}
-        %input{:type => 'password', :name => 'pass', :class => 'form-control'}
-
       %div{:class => 'row'}
         %div{:class => 'col-md-3'}
-          %form{:class => 'form-inline',  :id => 'send', :onsubmit => 'send(); return false', :style => 'display: none;'}
+          %form{:class => 'form-inline',  :id => 'send', :onsubmit => 'send(); return false'}
             %div{:class => 'form-group'}
               %input{:type => 'text', :name => 'body', :class => 'form-control'}
           %ul{:id => 'channels-tab', :class => 'nav nav-pills nav-stacked'}

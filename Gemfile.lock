@@ -4,14 +4,11 @@ GEM
     archive-zip (0.6.0)
       io-like (>= 0.3.0)
     backports (3.4.0)
-    celluloid (0.15.2)
-      timers (~> 1.1.0)
-    celluloid-io (0.15.0)
-      celluloid (>= 0.15.0)
-      nio4r (>= 0.5.0)
+    daemons (1.1.9)
     em-websocket (0.5.0)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.5.3)
+    event_emitter (0.2.5)
     eventmachine (1.0.3)
     gqtp (1.0.5)
     groonga-client (0.0.4)
@@ -21,14 +18,18 @@ GEM
       json
     haml (4.0.4)
       tilt
+    hashie (2.0.5)
     http_parser.rb (0.5.3)
+    httparty (0.12.0)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     io-like (0.3.0)
     irc-string (0.0.1)
     ircp (1.1.7)
       treetop
     json (1.8.1)
     multi_json (1.8.2)
-    nio4r (0.5.0)
+    multi_xml (0.5.5)
     pit (0.0.7)
     pkg-config (1.1.4)
     polyglot (0.3.3)
@@ -46,6 +47,13 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
+    sinatra-cometio (0.6.0)
+      event_emitter (>= 0.2.5)
+      eventmachine (>= 1.0.0)
+      httparty
+      json (>= 1.7.0)
+      sinatra (>= 1.3.0)
+      sinatra-contrib (>= 1.3.2)
     sinatra-contrib (1.4.2)
       backports (>= 2.0)
       multi_json
@@ -53,19 +61,40 @@ GEM
       rack-test
       sinatra (~> 1.4.0)
       tilt (~> 1.3)
+    sinatra-rocketio (0.3.3)
+      event_emitter (>= 0.2.5)
+      eventmachine (>= 1.0.0)
+      hashie
+      sinatra
+      sinatra-cometio (>= 0.5.9)
+      sinatra-websocketio (>= 0.4.0)
+    sinatra-websocketio (0.4.1)
+      em-websocket (>= 0.5.0)
+      event_emitter (>= 0.2.4)
+      eventmachine (>= 1.0.0)
+      json (>= 1.7.0)
+      sinatra (>= 1.3.0)
+      sinatra-contrib (>= 1.3.2)
+      websocket-client-simple
+    thin (1.6.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 1.0.0)
+      rack (>= 1.0.0)
     tilt (1.4.1)
-    timers (1.1.0)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
     uuidtools (2.1.4)
+    websocket (1.1.2)
+    websocket-client-simple (0.0.5)
+      event_emitter
+      websocket
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  celluloid-io
-  em-websocket
+  event_emitter
   haml
   irc-string
   ircp
@@ -75,4 +104,6 @@ DEPENDENCIES
   rroonga
   sinatra
   sinatra-contrib
+  sinatra-rocketio
+  thin
   uuidtools

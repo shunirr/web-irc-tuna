@@ -1,28 +1,23 @@
-var ws;
 var channels = {};
+var io = new RocketIO().connect();
 
-$(window).on("scroll", function() {
-  var scrollHeight = $(document).height();
-  var scrollPosition = $(window).height() + $(window).scrollTop();
-  if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
-    onFooterShown();
-  }
+$.getJSON("/api/v1/networks/1/channels", function(data) {
+  data.forEach(function(d) {
+    if (!hasChannel(d)) {
+      addChannel(d);
+      loadRecentLogs(d);
+    }
+  });
 });
 
-var loading = false;
-function onFooterShown() {
-  if (!loading) {
-    loding = true;
-    var offset = $('div[class="tab-pane active"] p').last().attr('id');
-    var channel_id = parseInt($('li[class="active"] a').attr('href').substr(1));
-    $.getJSON("/api/v1/channels/" + channel_id + "/logs?offset=" + offset, function(data) {
-      data.reverse().forEach(function(d) {
-        addLog(d.channel, formatDate(parseInt(d.created_at)), d.from, d.command, d.message, d.uuid, true);
-      });
-      loading = false;
-    });
+io.on('privmsg', function(msg) {
+  var data = JSON.parse(msg);
+  var channel = data.channel;
+  if (!hasChannel(channel)) {
+    addChannel(channel);
   }
-}
+  addLog(channel, formatDate(parseInt(data.created_at)), data.from, data.command, data.message, data.uuid);
+});
 
 function formatTime(dateStr) {
   var timeStr = $.format.date(dateStr, "HH:mm");
@@ -35,45 +30,12 @@ function formatDate(unixtime) {
   return formatTime(time.toString());
 }
 
-function loadChannels() {
-  $.getJSON("/api/v1/networks/1/channels", function(data) {
-    data.forEach(function(d) {
-      if (!hasChannel(d)) {
-        addChannel(d);
-        loadRecentLogs(d);
-      }
-    });
-  });
-}
-
 function loadRecentLogs(channel) {
   $.getJSON("/api/v1/channels/" + channel.id + "/logs", function(data) {
     data.forEach(function(d) {
       addLog(channel, formatDate(parseInt(d.created_at)), d.from, d.command, d.message, d.uuid);
     });
   });
-}
-
-function connect() {
-  loadChannels();
-  ws = new WebSocket(ws_url);
-
-  ws.onmessage = function(evt) {
-    var data = JSON.parse(JSON.parse(evt.data));
-    var channel = data.channel;
-    if (!hasChannel(channel)) {
-      addChannel(channel);
-    }
-    addLog(channel, formatDate(parseInt(data.created_at)), data.from, data.command, data.message, data.uuid);
-  };
-
-  ws.onopen = function(handshake) {
-    var password = $('input[name=pass]');
-    ws.send(password.val());
-    password.val('');
-    $('#auth').hide();
-    $('#send').show();
-  };
 }
 
 function addImages(channel, time, nick, images) {
@@ -113,15 +75,6 @@ function addLog(channel, time, nick, mode, body, id, isAppend) {
   }
 }
 
-function send() {
-  var channel = $('#channels-tab li[class=active]').text();
-  var body = $('input[name=body]');
-  if (channel && body.val()) {
-    ws.send( $.toJSON(['PRIVMSG', channel, body.val()]) );
-  }
-  body.val('');
-}
-
 function hasChannel(channel) {
   return channels[channel.id];
 }
@@ -146,3 +99,4 @@ function addChannel(channel) {
     $('#channels div:first').addClass('active');
   }
 }
+

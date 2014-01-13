@@ -10,20 +10,16 @@ require 'groonga'
 module Tuna 
   class Web < Sinatra::Base
     # use Login
+    use Chat
 
     configure do
       set :views, File.dirname(__FILE__) + '/../../views'
       set :public_folder, File.dirname(__FILE__) + '/../../public'
-
       Groonga::Database.open('db/groonga.db')
-      set :pit, Pit.get("tuna", :require => {
-        :ws_host => "WEBSOCKET_HOST",
-        :ws_port => "WEBSOCKET_PORT",
-      })
     end
-    
+
     get '/' do
-      haml :index, :locals => { :url => "ws://#{options.pit[:ws_host]}:#{options.pit[:ws_port]}" }
+      redirect '/chat'
     end
     
     get '/api/v1/networks' do
