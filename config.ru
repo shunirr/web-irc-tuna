@@ -3,11 +3,7 @@
 
 $:.unshift './lib', './'
 require 'tuna'
-require 'pit'
+require 'yaml'
 
-options = Pit.get("tuna", :require => {
-  :web_port  => "WEBSOCKET_PORT"
-})
-
-Tuna::Web.run! :port => options[:web_port]
-
+options = YAML.load(open('config.yaml').read)
+Tuna::Web.run! :port => options['grobal']['web']['port']
