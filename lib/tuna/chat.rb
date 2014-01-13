@@ -42,23 +42,7 @@ module Tuna
     end
 
     irc.on :privmsg do |msg|
-      channel   = Util.s(msg.params[0])
-      body      = CGI.escapeHTML(msg.params[1]) if msg.params[1]
-      body_html = Util.html(Util.expand_short_url(body))
-      if msg.prefix
-        nick = Util.s(msg.prefix.servername || msg.prefix.nick)
-      else
-        nick = @nick
-      end
-      network = Model::Network.find_by_name('default')
-      unless network
-        network = Model::Network.new(:name => 'default').save
-      end
-      c = Model::Channel.find_by_network_and_name(network, channel)
-      unless c 
-        c = Model::Channel.new(:name => channel, :network => network).save
-      end
-      log = Model::Log.new(:command => msg.command.to_s.downcase, :from => nick, :message => body_html, :channel => c).save
+      log = Model::Log.from_message(msg).save
       io.push :privmsg, log.to_json
     end
 
